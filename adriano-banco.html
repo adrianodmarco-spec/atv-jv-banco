@@ -1,0 +1,408 @@
+Nenhum selecionado
+
+Pular para o conteúdo
+Como usar o Gmail com leitores de tela
+
+1 de 105
+(sem assunto)
+Caixa de entrada
+
+José Reginaldo de Santanna Junior
+Anexos
+08:53 (há 25 minutos)
+para macedotheodoro2005, mim
+
+Traduzido: inglês
+português
+O recurso pode cometer erros. Por isso, cheque as traduções.
+
+ 1 anexo
+  •  Verificados pelo Gmail
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Currículo PDF</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        /* Estilos específicos para o layout do currículo */
+        #cv-preview-container {
+            background-color: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            min-height: 297mm;
+            width: 100%;
+            max-width: 210mm;
+            margin: 0 auto;
+            padding: 2.5rem;
+            box-sizing: border-box;
+        }
+        
+        /* Classe aplicada apenas no momento exato da geração do PDF */
+        .pdf-generating-layout {
+            width: 210mm !important;
+            min-height: 297mm !important;
+            padding: 20mm !important;
+            box-shadow: none !important;
+            margin: 0 !important;
+        }
+
+        /* Animação suave para botões */
+        .btn-animate {
+            transition: all 0.2s ease-in-out;
+        }
+        .btn-animate:hover {
+            transform: translateY(-2px);
+        }
+        .btn-animate:active {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="text-gray-800 antialiased min-h-screen flex flex-col items-center py-10 px-4 sm:px-6 lg:px-8">
+
+    <div class="max-w-4xl w-full mb-8 text-center">
+        <h1 class="text-4xl font-bold text-blue-600 mb-2 flex items-center justify-center gap-3">
+            <i class="ph ph-file-pdf text-5xl"></i>
+            Criador de Currículo PRO
+        </h1>
+        <p class="text-gray-600 text-lg">Preencha seus dados abaixo e gere um currículo profissional em PDF instantaneamente.</p>
+    </div>
+
+    <div class="max-w-7xl w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+        
+        <div class="bg-white rounded-2xl shadow-xl p-6 sm:p-8 w-full border border-gray-100">
+            <h2 class="text-2xl font-semibold mb-6 pb-2 border-b-2 border-blue-100 flex items-center gap-2">
+                <i class="ph ph-user-circle text-blue-500"></i> Informações Pessoais
+            </h2>
+            
+            <form id="cv-form" class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="nome" class="block text-sm font-medium text-gray-700 mb-1">Nome Completo *</label>
+                        <input type="text" id="nome" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow" placeholder="Ex: João da Silva">
+                    </div>
+                    <div>
+                        <label for="profissao" class="block text-sm font-medium text-gray-700 mb-1">Profissão/Cargo *</label>
+                        <input type="text" id="profissao" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow" placeholder="Ex: Desenvolvedor Front-end">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">E-mail *</label>
+                        <input type="email" id="email" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow" placeholder="seu@email.com">
+                    </div>
+                    <div>
+                        <label for="telefone" class="block text-sm font-medium text-gray-700 mb-1">Telefone</label>
+                        <input type="tel" id="telefone" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow" placeholder="(00) 00000-0000">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label for="localizacao" class="block text-sm font-medium text-gray-700 mb-1">Localização (Cidade/Estado)</label>
+                        <input type="text" id="localizacao" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow" placeholder="Ex: São Paulo, SP">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label for="linkedin" class="block text-sm font-medium text-gray-700 mb-1">LinkedIn (URL)</label>
+                        <input type="url" id="linkedin" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow" placeholder="https://linkedin.com/in/seuperfil">
+                    </div>
+                </div>
+
+                <div>
+                    <label for="resumo" class="block text-sm font-medium text-gray-700 mb-1">Resumo Profissional</label>
+                    <textarea id="resumo" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow resize-none" placeholder="Fale um pouco sobre sua trajetória, habilidades e objetivos..."></textarea>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-medium mb-2 text-gray-800 flex items-center gap-2"><i class="ph ph-briefcase"></i> Experiência Profissional</h3>
+                    <p class="text-xs text-gray-500 mb-2">Use uma linha em branco para separar diferentes experiências.</p>
+                    <textarea id="experiencia" rows="6" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow resize-y" placeholder="Ex:&#10;Empresa X - Cargo Y (2020 - 2023)&#10;Desenvolvi projetos fantásticos usando tecnologia Z...&#10;&#10;Empresa A - Cargo B (2018 - 2020)&#10;Liderei equipe de vendas..."></textarea>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-medium mb-2 text-gray-800 flex items-center gap-2"><i class="ph ph-graduation-cap"></i> Formação Acadêmica</h3>
+                    <textarea id="formacao" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow resize-y" placeholder="Ex:&#10;Bacharelado em Ciência da Computação - Universidade Y (2016 - 2020)&#10;Curso Técnico em Informática - Instituto Z (2014 - 2015)"></textarea>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-medium mb-2 text-gray-800 flex items-center gap-2"><i class="ph ph-wrench"></i> Habilidades (separadas por vírgula)</h3>
+                    <input type="text" id="habilidades" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow" placeholder="Ex: HTML, CSS, JavaScript, Liderança, Pacote Office">
+                </div>
+
+                <div class="pt-4 flex flex-col sm:flex-row gap-4">
+                    <button type="button" id="btn-preview" class="btn-animate flex-1 bg-gray-800 hover:bg-gray-900 text-white font-semibold py-3 px-6 rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-gray-300">
+                        <i class="ph ph-eye text-xl"></i> Atualizar Visualização
+                    </button>
+                    <button type="submit" id="btn-gerar-pdf" class="btn-animate flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-blue-200">
+                        <i class="ph ph-download-simple text-xl"></i> Baixar PDF
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="sticky top-8">
+            <div class="bg-gray-200 rounded-2xl p-4 flex justify-between items-center mb-4">
+                <h2 class="text-lg font-semibold text-gray-700 flex items-center gap-2">
+                    <i class="ph ph-monitor"></i> Visualização
+                </h2>
+                <span class="text-xs font-medium bg-blue-100 text-blue-800 py-1 px-2 rounded-full">Prévia em tempo real</span>
+            </div>
+            
+            <div class="overflow-x-auto bg-gray-300 p-2 rounded-xl border border-gray-300 shadow-inner">
+                <div id="cv-preview-container" class="bg-white font-sans text-gray-800 relative">
+                    <div id="empty-state" class="absolute inset-0 flex flex-col items-center justify-center text-gray-400 bg-white bg-opacity-90 z-10">
+                        <i class="ph ph-file-text text-6xl mb-4 opacity-50"></i>
+                        <p class="text-lg font-medium">Preencha o formulário</p>
+                        <p class="text-sm">Clique em "Atualizar Visualização" para ver aqui.</p>
+                    </div>
+
+                    <div id="cv-content" class="opacity-0 transition-opacity duration-300">
+                        <div class="border-b-2 border-gray-800 pb-6 mb-6">
+                            <h1 id="cv-nome" class="text-4xl font-bold text-gray-900 mb-1 uppercase tracking-wider">Seu Nome</h1>
+                            <h2 id="cv-profissao" class="text-xl text-blue-600 font-medium mb-4">Sua Profissão</h2>
+                            
+                            <div class="flex flex-wrap gap-x-6 gap-y-2 text-sm text-gray-600">
+                                <div id="cv-email-container" class="flex items-center gap-1 hidden">
+                                    <i class="ph ph-envelope-simple"></i> <span id="cv-email"></span>
+                                </div>
+                                <div id="cv-telefone-container" class="flex items-center gap-1 hidden">
+                                    <i class="ph ph-phone"></i> <span id="cv-telefone"></span>
+                                </div>
+                                <div id="cv-localizacao-container" class="flex items-center gap-1 hidden">
+                                    <i class="ph ph-map-pin"></i> <span id="cv-localizacao"></span>
+                                </div>
+                                <div id="cv-linkedin-container" class="flex items-center gap-1 hidden">
+                                    <i class="ph ph-linkedin-logo"></i> <span id="cv-linkedin"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="cv-resumo-section" class="mb-6 hidden">
+                            <h3 class="text-lg font-bold text-gray-900 uppercase border-b border-gray-300 mb-3 pb-1 tracking-wider">Perfil Profissional</h3>
+                            <p id="cv-resumo" class="text-sm leading-relaxed text-gray-700 text-justify"></p>
+                        </div>
+
+                        <div id="cv-experiencia-section" class="mb-6 hidden">
+                            <h3 class="text-lg font-bold text-gray-900 uppercase border-b border-gray-300 mb-3 pb-1 tracking-wider">Experiência Profissional</h3>
+                            <div id="cv-experiencia" class="text-sm leading-relaxed text-gray-700 space-y-3">
+                                </div>
+                        </div>
+
+                        <div id="cv-formacao-section" class="mb-6 hidden">
+                            <h3 class="text-lg font-bold text-gray-900 uppercase border-b border-gray-300 mb-3 pb-1 tracking-wider">Formação Acadêmica</h3>
+                            <div id="cv-formacao" class="text-sm leading-relaxed text-gray-700 space-y-3">
+                                </div>
+                        </div>
+
+                        <div id="cv-habilidades-section" class="mb-4 hidden">
+                            <h3 class="text-lg font-bold text-gray-900 uppercase border-b border-gray-300 mb-3 pb-1 tracking-wider">Principais Habilidades</h3>
+                            <div id="cv-habilidades" class="flex flex-wrap gap-2">
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="loading-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex flex-col items-center justify-center hidden backdrop-blur-sm transition-opacity">
+        <div class="bg-white p-8 rounded-2xl shadow-2xl flex flex-col items-center">
+            <i class="ph ph-spinner-gap text-5xl text-blue-600 animate-spin mb-4"></i>
+            <h3 class="text-xl font-bold text-gray-800">Gerando seu PDF...</h3>
+            <p class="text-gray-500 mt-2 text-center max-w-xs">Isso pode levar alguns segundos dependendo da quantidade de informações.</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('cv-form');
+            const btnPreview = document.getElementById('btn-preview');
+            const emptyState = document.getElementById('empty-state');
+            const cvContent = document.getElementById('cv-content');
+            const loadingOverlay = document.getElementById('loading-overlay');
+
+            // Função para formatar texto com quebras de linha em parágrafos HTML
+            const formatMultilineText = (text) => {
+                if (!text) return '';
+                const paragraphs = text.split(/\n\s*\n/);
+                return paragraphs.map(p => {
+                    const lines = p.split('\n').join('<br>');
+                    return `<p class="mb-2">${lines}</p>`;
+                }).join('');
+            };
+
+            // Função principal para atualizar o preview
+            const updatePreview = () => {
+                const nome = document.getElementById('nome').value.trim();
+                const profissao = document.getElementById('profissao').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const telefone = document.getElementById('telefone').value.trim();
+                const localizacao = document.getElementById('localizacao').value.trim();
+                const linkedin = document.getElementById('linkedin').value.trim();
+                const resumo = document.getElementById('resumo').value.trim();
+                const experiencia = document.getElementById('experiencia').value.trim();
+                const formacao = document.getElementById('formacao').value.trim();
+                const habilidades = document.getElementById('habilidades').value.trim();
+
+                if(!nome) {
+                    document.getElementById('nome').focus();
+                    return false;
+                }
+
+                // Oculta a marca d'água inicial instrucional
+                emptyState.classList.add('hidden-preview');
+                emptyState.style.display = 'none';
+                
+                cvContent.classList.remove('opacity-0');
+                cvContent.classList.add('opacity-100');
+
+                // Atualizar Nome e Profissão
+                document.getElementById('cv-nome').textContent = nome || 'Seu Nome';
+                document.getElementById('cv-profissao').textContent = profissao || 'Sua Profissão';
+
+                // Auxiliar para ocultar/exibir seções
+                const toggleField = (idValue, idContainer, idText) => {
+                    const container = document.getElementById(idContainer);
+                    if (idValue) {
+                        document.getElementById(idText).textContent = idValue;
+                        container.classList.remove('hidden');
+                    } else {
+                        container.classList.add('hidden');
+                    }
+                };
+
+                toggleField(email, 'cv-email-container', 'cv-email');
+                toggleField(telefone, 'cv-telefone-container', 'cv-telefone');
+                toggleField(localizacao, 'cv-localizacao-container', 'cv-localizacao');
+                
+                // LinkedIn Link dinâmico
+                const linkedinContainer = document.getElementById('cv-linkedin-container');
+                if (linkedin) {
+                    let displayUrl = linkedin;
+                    try {
+                        const urlObj = new URL(linkedin);
+                        displayUrl = urlObj.hostname.replace('www.', '') + urlObj.pathname;
+                    } catch (e) {
+                        // fallback se não for URL válida
+                    }
+                    document.getElementById('cv-linkedin').innerHTML = `<a href="${linkedin}" target="_blank" class="text-blue-600 hover:underline">${displayUrl}</a>`;
+                    linkedinContainer.classList.remove('hidden');
+                } else {
+                    linkedinContainer.classList.add('hidden');
+                }
+
+                // Seção Resumo
+                const resumoSection = document.getElementById('cv-resumo-section');
+                if (resumo) {
+                    document.getElementById('cv-resumo').textContent = resumo;
+                    resumoSection.classList.remove('hidden');
+                } else {
+                    resumoSection.classList.add('hidden');
+                }
+
+                // Seção Experiência
+                const expSection = document.getElementById('cv-experiencia-section');
+                if (experiencia) {
+                    document.getElementById('cv-experiencia').innerHTML = formatMultilineText(experiencia);
+                    expSection.classList.remove('hidden');
+                } else {
+                    expSection.classList.add('hidden');
+                }
+
+                // Seção Formação
+                const formacaoSection = document.getElementById('cv-formacao-section');
+                if (formacao) {
+                    document.getElementById('cv-formacao').innerHTML = formatMultilineText(formacao);
+                    formacaoSection.classList.remove('hidden');
+                } else {
+                    formacaoSection.classList.add('hidden');
+                }
+
+                // Seção Habilidades (Badges)
+                const habSection = document.getElementById('cv-habilidades-section');
+                if (habilidades) {
+                    const habArray = habilidades.split(',').map(h => h.trim()).filter(h => h);
+                    if (habArray.length > 0) {
+                        const habHtml = habArray.map(h => 
+                            `<span class="bg-gray-100 text-gray-800 text-xs font-semibold px-2.5 py-1 rounded-full border border-gray-300">${h}</span>`
+                        ).join('');
+                        document.getElementById('cv-habilidades').innerHTML = habHtml;
+                        habSection.classList.remove('hidden');
+                    } else {
+                        habSection.classList.add('hidden');
+                    }
+                } else {
+                    habSection.classList.add('hidden');
+                }
+                return true;
+            };
+
+            btnPreview.addEventListener('click', updatePreview);
+
+            // Listener inteligente ao digitar nos campos
+            form.addEventListener('input', () => {
+                if (emptyState.classList.contains('hidden-preview')) {
+                    clearTimeout(window.previewTimeout);
+                    window.previewTimeout = setTimeout(updatePreview, 500);
+                }
+            });
+
+            // Geração do PDF
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Valida e atualiza a prévia antes de prosseguir
+                if (!updatePreview()) return;
+
+                const nome = document.getElementById('nome').value.trim();
+                const filename = nome ? `Curriculo_${nome.replace(/\s+/g, '_')}.pdf` : 'Curriculo.pdf';
+
+                loadingOverlay.classList.remove('hidden');
+
+                const element = document.getElementById('cv-preview-container');
+
+                // 1. Força o container a se comportar estritamente como um A4 antes da captura
+                element.classList.add('pdf-generating-layout');
+
+                const opt = {
+                    margin:       0, 
+                    filename:     filename,
+                    image:        { type: 'jpeg', quality: 0.98 },
+                    html2canvas:  { 
+                        scale: 2, // Garante alta definição de texto e vetores
+                        useCORS: true,
+                        logging: false,
+                        scrollX: 0,
+                        scrollY: 0
+                    },
+                    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                };
+
+                // Executa a compilação
+                html2pdf().set(opt).from(element).save()
+                .then(() => {
+                    // 2. Remove as restrições estritas pós-captura para a tela voltar ao normal
+                    element.classList.remove('pdf-generating-layout');
+                    setTimeout(() => {
+                        loadingOverlay.classList.add('hidden');
+                    }, 500);
+                })
+                .catch(err => {
+                    console.error("Erro ao gerar PDF:", err);
+                    alert("Ocorreu um erro ao gerar o PDF. Tente novamente.");
+                    loadingOverlay.classList.add('hidden');
+                    element.classList.remove('pdf-generating-layout');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+Curriculo.txt
+Exibindo Curriculo.txt.
